@@ -19,15 +19,33 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.Damageable;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import lombok.AllArgsConstructor;
+
+@AllArgsConstructor
 public class ShearsUsageListener implements Listener {
+    
+    private final JavaPlugin plugin;
     
     @EventHandler
     public void onShearsUsage(PlayerInteractEntityEvent event) {
         Entity involved = event.getRightClicked();
         
-        if(!involved.getType().equals(EntityType.ITEM_FRAME)
-                && !involved.getType().equals(EntityType.GLOW_ITEM_FRAME)) {
+        if(!involved.getType().equals(EntityType.ITEM_FRAME)) {
             return;
+        }
+        
+        // Version check helps to avoid loading not existing classes
+        // getBukkitVersion returns version like "1.16.5-R0.1-SNAPSHOT"
+        String bukkitVersion = plugin.getServer().getBukkitVersion();
+        // Cutting out only second number after the first dot
+        // From previous example will return "16"
+        String secondNumber = bukkitVersion.substring(2, 4);
+        
+        int version = Integer.getInteger(secondNumber);
+        if(version > 16) {
+            if(!involved.getType().equals(EntityType.GLOW_ITEM_FRAME)) {
+                return;
+            }
         }
         
         ItemFrame frame = (ItemFrame) involved;
@@ -83,7 +101,7 @@ public class ShearsUsageListener implements Listener {
         }
     }
     
-    public void register(JavaPlugin plugin) {
+    public void register() {
         plugin.getServer().getPluginManager().registerEvents(this, plugin);
     }
 }

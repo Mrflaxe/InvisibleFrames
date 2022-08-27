@@ -13,6 +13,6 @@ public class InvisibleFrames extends JavaPlugin {
     }
     
     private void registerListeners() {
-        new ShearsUsageListener().register(this);
+        new ShearsUsageListener(this).register();
     }
 }
