@@ -41,7 +41,8 @@ public class ShearsUsageListener implements Listener {
         // From previous example will return "16"
         String secondNumber = bukkitVersion.substring(2, 4);
         
-        int version = Integer.getInteger(secondNumber);
+        int version = Integer.parseInt(secondNumber);
+        
         if(version > 16) {
             if(!involved.getType().equals(EntityType.GLOW_ITEM_FRAME)) {
                 return;
