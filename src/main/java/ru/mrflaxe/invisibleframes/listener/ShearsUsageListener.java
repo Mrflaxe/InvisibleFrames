@@ -6,6 +6,7 @@ import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Sound;
+import org.bukkit.Statistic;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
@@ -73,6 +74,7 @@ public class ShearsUsageListener implements Listener {
         }
         
         frame.setVisible(false);
+        updatePlayerStatistic(player, item);
         
         Location frameLocation = frame.getLocation();
         frameLocation.getWorld().playSound(frameLocation, Sound.ENTITY_SHEEP_SHEAR, 1, 1);
@@ -100,6 +102,12 @@ public class ShearsUsageListener implements Listener {
             
             player.getInventory().setItem(hand, shears);
         }
+    }
+    
+    private void updatePlayerStatistic(Player player, ItemStack shears) {
+        int itemUseCount = player.getStatistic(Statistic.USE_ITEM, shears.getType());
+        itemUseCount++;
+        player.setStatistic(Statistic.USE_ITEM, shears.getType(), itemUseCount);
     }
     
     public void register() {
