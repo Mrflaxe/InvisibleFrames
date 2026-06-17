@@ -1,5 +1,0 @@
-main: ru.mrflaxe.invisibleframes.InvisibleFrames
-name: ${project.name}
-author: Mrflaxe
-version: ${project.version}
-api-version: 1.16
