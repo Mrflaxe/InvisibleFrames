@@ -5,29 +5,25 @@ import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.ItemFrame;
-import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
-import org.bukkit.event.entity.EntityDamageByEntityEvent;
-import org.bukkit.inventory.ItemStack;
+import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.plugin.java.JavaPlugin;
 
 /**
- * Reveals an invisible frame once its item is knocked out of it.
+ * Reveals an invisible item frame once it loses its item but survives as an entity.
  */
 @NoArgsConstructor
 public class FrameItemDropListener implements Listener {
 
-    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
-    public void onFrameHit(EntityDamageByEntityEvent event) {
+    private JavaPlugin plugin;
+
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+    public void onFrameDamage(EntityDamageEvent event) {
         Entity damaged = event.getEntity();
 
         if (!(damaged instanceof ItemFrame)) {
-            return;
-        }
-
-        if (!(event.getDamager() instanceof Player)) {
             return;
         }
 
@@ -37,15 +33,25 @@ public class FrameItemDropListener implements Listener {
             return;
         }
 
-        ItemStack content = frame.getItem();
-        if (content.getType() == Material.AIR) {
+        if (frame.getItem().getType() == Material.AIR) {
             return;
         }
 
-        frame.setVisible(true);
+        Bukkit.getScheduler().runTask(plugin, () -> {
+            if (!frame.isValid()) {
+                return;
+            }
+
+            if (frame.getItem().getType() != Material.AIR) {
+                return;
+            }
+
+            frame.setVisible(true);
+        });
     }
 
     public void register(JavaPlugin plugin) {
+        this.plugin = plugin;
         Bukkit.getPluginManager().registerEvents(this, plugin);
     }
 }
