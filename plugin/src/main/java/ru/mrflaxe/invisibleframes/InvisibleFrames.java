@@ -5,6 +5,7 @@ import java.util.logging.Level;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import ru.mrflaxe.invisibleframes.bootstrap.VersionResolver;
+import ru.mrflaxe.invisibleframes.listener.FrameItemDropListener;
 import ru.mrflaxe.invisibleframes.listener.ShearsUsageListener;
 import ru.mrflaxe.invisibleframes.version.VersionContext;
 
@@ -22,5 +23,6 @@ public class InvisibleFrames extends JavaPlugin {
         }
 
         new ShearsUsageListener(context).register(this);
+        new FrameItemDropListener().register(this);
     }
 }
