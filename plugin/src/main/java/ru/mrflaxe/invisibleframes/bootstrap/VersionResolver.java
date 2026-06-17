@@ -21,10 +21,9 @@ import ru.mrflaxe.invisibleframes.version.VersionContext;
  */
 public final class VersionResolver {
 
-    private static final Entry[] REGISTRY = new Entry[] {
-        new Entry(new int[] {26, 1, 0}, "ru.mrflaxe.invisibleframes.v26_1.V26_1VersionContext"),
-        new Entry(new int[] {1, 20, 5}, "ru.mrflaxe.invisibleframes.v1_20_5.V1_20_5VersionContext"),
-        new Entry(new int[] {1, 16, 0}, "ru.mrflaxe.invisibleframes.v1_16.V1_16VersionContext"),
+    private static final VersionContextEntry[] REGISTRY = new VersionContextEntry[] {
+        new VersionContextEntry(new int[] {1, 20, 5}, "ru.mrflaxe.invisibleframes.v1_20_5.V1_20_5VersionContext"),
+        new VersionContextEntry(new int[] {1, 16, 0}, "ru.mrflaxe.invisibleframes.v1_16.V1_16VersionContext"),
     };
 
     private VersionResolver() {}
@@ -33,7 +32,7 @@ public final class VersionResolver {
         String rawVersion = Bukkit.getBukkitVersion();
         int[] server = parseVersion(rawVersion);
 
-        for (Entry entry : REGISTRY) {
+        for (VersionContextEntry entry : REGISTRY) {
             if (compare(server, entry.minVersion) >= 0) {
                 VersionContext ctx = instantiate(entry.className);
                 logger.info("Selected " + simpleName(entry.className)
@@ -42,7 +41,7 @@ public final class VersionResolver {
             }
         }
 
-        Entry fallback = REGISTRY[REGISTRY.length - 1];
+        VersionContextEntry fallback = REGISTRY[REGISTRY.length - 1];
         logger.log(Level.WARNING, "Could not match server version ''{0}'' to any known context; "
                 + "falling back to {1}.",
                 new Object[] { rawVersion, simpleName(fallback.className) });
@@ -93,11 +92,11 @@ public final class VersionResolver {
         return dot < 0 ? fqcn : fqcn.substring(dot + 1);
     }
 
-    private static final class Entry {
+    private static final class VersionContextEntry {
         final int[] minVersion;
         final String className;
 
-        Entry(int[] minVersion, String className) {
+        VersionContextEntry(int[] minVersion, String className) {
             this.minVersion = minVersion;
             this.className = className;
         }

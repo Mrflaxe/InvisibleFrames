@@ -6,6 +6,10 @@ allprojects {
 subprojects {
     apply plugin: 'java'
 
+    ext {
+        lombokVersion = '1.18.46'
+    }
+
     repositories {
         mavenCentral()
         maven {
@@ -24,6 +28,11 @@ subprojects {
 
     java {
         withSourcesJar()
+    }
+
+    dependencies {
+        compileOnly "org.projectlombok:lombok:${lombokVersion}"
+        annotationProcessor "org.projectlombok:lombok:${lombokVersion}"
     }
 
     tasks.withType(JavaCompile).configureEach {

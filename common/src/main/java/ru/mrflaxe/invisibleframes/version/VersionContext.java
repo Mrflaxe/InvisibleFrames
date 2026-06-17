@@ -1,6 +1,7 @@
 package ru.mrflaxe.invisibleframes.version;
 
-import org.bukkit.enchantments.Enchantment;
+import org.bukkit.entity.Player;
+import org.bukkit.inventory.EquipmentSlot;
 
 /**
  * Version-specific facade. Each supported Minecraft version range provides
@@ -9,9 +10,12 @@ import org.bukkit.enchantments.Enchantment;
 public interface VersionContext {
 
     /**
-     * The "Unbreaking" enchantment. Its API constant was renamed across versions
-     * ({@code DURABILITY} on legacy builds, {@code UNBREAKING} on modern ones),
-     * so each context resolves it against the API it was compiled with.
+     * Applies one point of wear to the item the player holds in {@code hand}.
+     *
+     * <p>Modern (Paper) contexts delegate to the server's own item-damage routine,
+     * which already accounts for the Unbreaking enchantment and fires the matching
+     * item-damage / item-break events. The legacy (Spigot) context reproduces that
+     * behaviour by hand.
      */
-    Enchantment getUnbreakingEnchantment();
+    void damageShears(Player player, EquipmentSlot hand);
 }
